@@ -43,7 +43,8 @@ void CsharpWriter::csharpFilePrepare(string writetag) {
 			asctime_s(buffer, 26, &newTime);
 
 			
-			csharpOut << "// -- Version-Datetime: " << "\n// (c) Roger Gross 2022" << buffer << csharpFileHeader << csharpNamespace << csharpClassName << PAP_FileMainComment;
+			csharpOut << "// -- Version-Datetime: "  << buffer << csharpFileHeader << csharpNamespace << csharpClassName << PAP_FileMainComment;
+
 
 
 		}

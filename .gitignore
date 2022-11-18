@@ -9,7 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-Lohnsteuer2022.xml.xhtml
+*.xml.xhtml
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

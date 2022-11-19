@@ -1,4 +1,4 @@
-// -- Version-Datetime: Fri Nov 18 18:58:01 2022
+// -- Version-Datetime: Sat Nov 19 18:47:29 2022
 
 
 using System;
@@ -3347,7 +3347,7 @@ public void UPTAB22()
               //to do's
 
 
-                ST = Decimal.Floor(   ((X *  (0.42m)) -  (0.42m))  ) ;
+                ST = Decimal.Floor(   ((X *  (0.42m )) -  (9336.45m ))  ) ;
 
 
            }
@@ -3357,7 +3357,7 @@ public void UPTAB22()
               //to do's
 
 
-                ST = Decimal.Floor(   ((X *  (0.45m)) -  (0.45m))  ) ;
+                ST = Decimal.Floor(   ((X *  (0.45m )) -  (17671.2m ))  ) ;
 
 
             }

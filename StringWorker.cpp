@@ -206,16 +206,19 @@ void StringWorker::MethodStringToCsharpCode(string matchstring, string name) {
 
 
 string StringWorker::MathStringToCsharpMath(string tempString){
-	  
+	 
+	bool checker = false;
+
 	string evalString = tempString;
 	string mathString = "";
 
 	regex rgxBigDecimal("new BigDecimal\\((.*)\\)");
 	regex rgxBigDecimalValueOfLong("BigDecimal\\.valueOf.*\\((.*)\\.longValue\\(\\)\\)");
+	regex rgxBigDecimalBigDecimal("BigDecimal\\.valueOf.*\\(([0-9]*.?[0-9]*)\\).*BigDecimal\\.valueOf.*\\(([0-9]*.?[0-9]*)\\)");
 	regex rgxBigDecimalValueOfAbisZ("BigDecimal\\.valueOf.?\\(([a-zA-Z]*)\\)");                
 	regex rgxBigDecimalValueOf0bis9("BigDecimal\\.valueOf.?\\(([0-9]*?\\.?[0-9]*)\\)");   
 	regex rgxBigDecimalDotValues("BigDecimal\\.valueOf.?(\\([a-zA-Z]*\\..*\\(?\\)?\\))");
-	regex rgxBigDecimalAddSubEtc("BigDecimal\\.valueOf.?\\(([0-9]*\\.[0-9]*)(.)([0-9]*\\.?[0-9]*)\\)");
+	regex rgxBigDecimalAddSubEtc("BigDecimal\\.valueOf.?\\(([0-9]*\\.[0-9]*)(.)([0-9]*\\.?[0-9]*)\\)");  // BigDecimal.valueOf( x + y) etc.
 	regex rgxDivideBigDecimalRoundDown0("=(.*).\\/.*?\\((.*),.0,.*BigDecimal\\.ROUND_DOWN\\)");
 	regex rgxDivideBigDecimalRoundDown2("=(.*).\\/.*\\((ZAHL.*?),.2,.*BigDecimal\\.ROUND_DOWN\\)");
 	regex rgxDivideBigDecimalRoundDown6("=(.*).\\/.*\\((ZAHL.*?),.6,.*BigDecimal\\.ROUND_DOWN\\)");
@@ -235,12 +238,27 @@ string StringWorker::MathStringToCsharpMath(string tempString){
 
 	regex_search(mathString, matches, rgxBigDecimalValueOfLong);
 	mathString = StringReplace("BigDecimal\\.valueOf.*\\(.*\\.longValue\\(\\)\\)", " (decimal) Math.Truncate( " + matches.str(1) + " )", mathString);
+
+	checker = regex_search(mathString, matches, rgxBigDecimalBigDecimal);
+	//cout << "matches1: " << matches.str(1) << " matches2: " << matches.str(2) << endl;
+	if (checker)
+	{
+		string temp1;
+		temp1 = regex_replace(mathString, regex("BigDecimal\\.valueOf.*\\(" + matches.str(1) + "\\)"), matches.str(1)+"m ");
+		mathString = regex_replace(temp1, regex("BigDecimal\\.valueOf.*\\(" + matches.str(2) + "\\)"), matches.str(2)+"m ");
+		
+		//cout << mathString << endl;
+		
+	}
+	
 	regex_search(mathString, matches, rgxBigDecimalValueOfAbisZ);
 	mathString = StringReplace("BigDecimal\\.valueOf.?\\([a-zA-Z]*\\)", " (decimal) " + matches.str(1), mathString);
 	regex_search(mathString, matches, rgxBigDecimalValueOf0bis9);
 	mathString = StringReplace("BigDecimal\\.valueOf.?\\([0-9]*?\\.?[0-9]*\\)", matches.str(1) + "m", mathString);
+	
 	regex_search(mathString, matches, rgxBigDecimalAddSubEtc);
 	mathString = StringReplace("BigDecimal\\.valueOf.?\\(.*\\)", matches.str(1) + "m " + matches.str(2) + " " + matches.str(3) + "m", mathString);
+	
 	
 	mathString = StringReplace(".add", " + ", mathString);
 	mathString = StringReplace(".subtract", " - ", mathString);
